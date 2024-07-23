@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/necm1/next-webpack-multi-tailwind-layout-plugin.git"
+    "url": "git+https://github.com/necm1/next-webpack-multi-tailwind-layout-plugin.git"
   },
   "author": "necm1 <necmi.m.hasan@outlook.de>",
   "license": "MIT",
