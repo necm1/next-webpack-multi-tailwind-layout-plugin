@@ -46,6 +46,7 @@ const { composePlugins, withNx } = require('@nx/next');
 const { resolve } = require('path');
 const fs = require('fs');
 const scssLoader = require('next-webpack-multi-tailwind-layout-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const resolveDirectories = (baseDir, pattern) => {
   return fs.readdirSync(baseDir)
@@ -92,6 +93,19 @@ const nextConfig = {
         getTailwindConfigPath: tailwindConfigResolver,
       })
     );
+
+    if (!dev) {
+      if (!config.plugins) {
+        config.plugins = [];
+      }
+
+      config.plugins.push(
+        new MiniCssExtractPlugin({
+          filename: 'static/css/[name].[contenthash].css',
+          chunkFilename: 'static/css/[name].[contenthash].css',
+        })
+      );
+    }
 
     return config;
   },
@@ -155,3 +169,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
 }
 
 ```
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for any bugs or enhancements.

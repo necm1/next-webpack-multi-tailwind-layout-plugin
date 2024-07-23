@@ -11,26 +11,12 @@ import { LoaderOptions } from '../interface/loader-options.interface';
  * @author necm1 (https://github.com/necm1)
  */
 export class SCSSLoader {
-  private dev: boolean;
-  private dirs: string[];
-  private regex: RegExp;
-  private getTailwindConfigPath: (match: RegExpMatchArray) => string;
-  private cssLoaderConfiguration?: any;
-  private postcssPlugins?: any[];
-
   /**
    * Constructor for SCSSLoader class.
    *
    * @param {LoaderOptions} options - The SCSSLoader options.
    */
-  constructor(options: LoaderOptions) {
-    this.dev = options.dev;
-    this.dirs = options.dirs;
-    this.regex = options.regex;
-    this.getTailwindConfigPath = options.getTailwindConfigPath;
-    this.cssLoaderConfiguration = options.cssLoaderConfiguration;
-    this.postcssPlugins = options.postcssPlugins;
-  }
+  constructor(private options: LoaderOptions) {}
 
   /**
    * Returns a Webpack loader configuration for handling SCSS files.
@@ -38,32 +24,33 @@ export class SCSSLoader {
    * @return {Object} The Webpack loader configuration object.
    */
   public getSCSSLoader() {
+    const { dev, dirs, regex, getTailwindConfigPath, cssLoaderConfiguration, postcssPlugins } = this.options;
+
     return {
-      test: this.regex,
+      test: regex,
       use: [
-        this.dev ? 'style-loader' : MiniCssExtractPlugin.loader,
+        dev ? 'style-loader' : MiniCssExtractPlugin.loader,
         {
           loader: 'css-loader',
-          ...this.cssLoaderConfiguration,
+          ...cssLoaderConfiguration,
         },
         {
           loader: 'postcss-loader',
           options: {
             postcssOptions: (loaderContext: any) => {
-              const pathMatch = loaderContext.resourcePath.match(this.regex);
+              const pathMatch = loaderContext.resourcePath.match(regex);
 
               if (pathMatch) {
-                const tailwindConfigPath =
-                  this.getTailwindConfigPath(pathMatch);
+                const tailwindConfigPath = getTailwindConfigPath(pathMatch);
 
                 return {
                   plugins: [
                     postcssImport({
-                      path: [...this.dirs],
+                      path: [...dirs],
                     }),
                     tailwindcss(tailwindConfigPath),
                     autoprefixer(),
-                    ...(this.postcssPlugins || []),
+                    ...(postcssPlugins || []),
                   ],
                 };
               }
