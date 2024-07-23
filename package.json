@@ -1,6 +1,6 @@
 {
   "name": "next-webpack-multi-tailwind-layout-plugin",
-  "version": "0.0.1",
+  "version": "0.0.2-rc",
   "description": "A plugin for loading SCSS with multiple Tailwind CSS configurations in Next.js",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
