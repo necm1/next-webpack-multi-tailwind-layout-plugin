@@ -1,5 +1,19 @@
 import { LoaderOptions } from './interface/loader-options.interface';
 import { SCSSLoader } from './loader/scss.loader';
+import { resolve }  from 'path';
+import fs from 'fs';
+
+/**
+ * Dynamically resolve directories matching a pattern.
+ * @param {string} baseDir - The base directory to search in.
+ * @param {string} pattern - The pattern to match directories.
+ * @returns {string[]} - The resolved directories.
+ */
+export function resolveDirectories(baseDir: string, pattern: string | RegExp) {
+    return fs.readdirSync(baseDir)
+      .filter((dir) => new RegExp(pattern).test(dir))
+      .map((dir) => resolve(baseDir, dir));
+  }
 
 /**
  * Creates an SCSS loader configuration for handling SCSS files.
@@ -14,8 +28,6 @@ import { SCSSLoader } from './loader/scss.loader';
  * @return {Object} The SCSS loader configuration object.
  */
 
-const scssLoader = (options: LoaderOptions) => {
+export const scssLoader = (options: LoaderOptions) => {
   return new SCSSLoader(options).getSCSSLoader();
 };
-
-export default scssLoader;

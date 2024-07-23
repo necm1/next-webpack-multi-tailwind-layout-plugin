@@ -1,17 +1,15 @@
 {
     "compilerOptions": {
       "target": "ES5",
-      "module": "ESNext",
-      "moduleResolution": "node",
+      "module": "ES6",
+      "lib": ["ES2015", "DOM"],
       "declaration": true,
-      "declarationDir": "./dist/types",
       "outDir": "./dist",
-      "rootDir": "./src",
       "strict": true,
       "esModuleInterop": true,
-      "skipLibCheck": true
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "moduleResolution": "node"
     },
-    "include": ["src"],
-    "exclude": ["node_modules", "dist"]
+    "include": ["src/**/*"]
   }
-  

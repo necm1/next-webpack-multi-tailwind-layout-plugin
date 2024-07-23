@@ -44,15 +44,8 @@ In your `next.config.js`, use the plugin to configure the SCSS loader with multi
 ```js
 const { composePlugins, withNx } = require('@nx/next');
 const { resolve } = require('path');
-const fs = require('fs');
-const scssLoader = require('next-webpack-multi-tailwind-layout-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
-const resolveDirectories = (baseDir, pattern) => {
-  return fs.readdirSync(baseDir)
-    .filter((dir) => new RegExp(pattern).test(dir))
-    .map((dir) => resolve(baseDir, dir));
-};
+const { scssLoader, resolveDirectories } = require('next-webpack-multi-tailwind-layout-plugin');
 
 const nextConfig = {
   nx: {
@@ -60,10 +53,6 @@ const nextConfig = {
   },
   webpack: (config, { dev, isServer }) => {
     const layoutDirs = resolveDirectories(resolve(__dirname, '../../packages'), /^layout-/);
-
-    const tailwindConfigResolver = (match) => {
-      return resolve(__dirname, `../../packages/layout-${match[1]}/tailwind.config.js`);
-    };
 
     config.module.rules.forEach((rule) => {
       if (rule.oneOf) {
@@ -76,8 +65,7 @@ const nextConfig = {
           ) {
             oneOfRule.exclude = [
               ...(oneOfRule.exclude || []),
-              // Regex to exclude layout-*/src/style.scss
-              /packages\/layout-.*\/src\/style\.scss/,
+              /packages\/layout-.*\/src\/style\.scss/, // Exclude file(s)
             ];
           }
         });
@@ -88,9 +76,8 @@ const nextConfig = {
       scssLoader({
         dev,
         dirs: layoutDirs,
-        // Regex to include layout-*/src/style.scss with scssLoader
-        regex: /packages\/layout-(.*)\/src\/style\.scss$/,
-        getTailwindConfigPath: tailwindConfigResolver,
+        regex: /packages\/layout-(.*)\/src\/style\.scss$/, // Find style(s)
+        getTailwindConfigPath: (match) => resolve(__dirname, `../../packages/layout-${match[1]}/tailwind.config.js`),
       })
     );
 
@@ -146,19 +133,11 @@ body {
   @apply bg-gray-100;
 }
 ```
-## Dynamic Import Example
-
-To dynamically import `layout-one/src/layout.tsx`, you can use the following example:
+## Next Layout Example
 
 ```jsx
 // apps/next/app/layout.tsx
-import dynamic from 'next/dynamic';
-
-// Dynamically import the layout component based on some condition or configuration
-// you can also use path aliases
-const LayoutOne = dynamic(() => import('../../packages/layout-one/src/layout'), {
-  ssr: false,
-});
+import LayoutOne from '@app/layout-one';
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (

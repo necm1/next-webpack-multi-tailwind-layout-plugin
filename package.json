@@ -1,10 +1,10 @@
 {
   "name": "next-webpack-multi-tailwind-layout-plugin",
-  "version": "0.0.2-rc",
+  "version": "0.0.2-1-rc",
   "description": "A plugin for loading SCSS with multiple Tailwind CSS configurations in Next.js",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
-  "types": "dist/types/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c",
     "prepare": "npm run build"
@@ -19,6 +19,7 @@
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
+    "@types/node": "^20.14.12",
     "@types/postcss-import": "^14.0.3",
     "rollup": "^4.19.0",
     "typescript": "^5.5.4"

@@ -2,6 +2,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import postcssImport from 'postcss-import';
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
+
 import { LoaderOptions } from '../interface/loader-options.interface';
 
 /**
@@ -32,7 +33,10 @@ export class SCSSLoader {
         dev ? 'style-loader' : MiniCssExtractPlugin.loader,
         {
           loader: 'css-loader',
-          ...cssLoaderConfiguration,
+          options: {
+            importLoaders: 1,
+            ...cssLoaderConfiguration
+          },
         },
         {
           loader: 'postcss-loader',
@@ -52,8 +56,10 @@ export class SCSSLoader {
                     autoprefixer(),
                     ...(postcssPlugins || []),
                   ],
+                  // config: tailwindConfigPath
                 };
               }
+
               return {};
             },
           },
