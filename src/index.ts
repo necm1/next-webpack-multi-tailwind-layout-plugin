@@ -13,6 +13,9 @@ import { SCSSLoader } from './loader/scss.loader';
  * @param {any} [postcssPlugins] - Optional configuration for PostCSS plugins.
  * @return {Object} The SCSS loader configuration object.
  */
-export const scssLoader = (options: LoaderOptions) => {
+
+const scssLoader = (options: LoaderOptions) => {
   return new SCSSLoader(options).getSCSSLoader();
 };
+
+export default scssLoader;
